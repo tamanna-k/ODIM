@@ -20,23 +20,36 @@ package datacommunicator
 // -----------------------------------------------------------------------------
 import (
 	"encoding/json"
-	"fmt"
 	"log"
+	"reflect"
 )
 
-// BrokerType defines the underline MQ platform to be selected for the
-// messages. KAFKA is the platform supported as part of odimra phase 1.
+// BrokerID defines the Backend Communication Broker / Router ID
+type BrokerID int
+
+// KAFKA, QPID possible Routers, that can be used for communication
 const (
-	KAFKA = iota // KAFKA as Messaging Platform, Please use this ID
+	KAFKA BrokerID = iota
+	QPID
 )
 
-// MQBus Interface defines the Process interface function (Only function user
-// should call). These functions are implemented as part of Packet struct.
+// MMap - defines Communication Medium map
+var MMap = make(map[BrokerID]reflect.Type)
+
+func init() {
+	MMap[KAFKA] = reflect.TypeOf((*KafkaPacket)(nil)).Elem()
+	MMap[QPID] = reflect.TypeOf((*QpidPacket)(nil)).Elem()
+}
+
+// MQBus Interface defines the Process interface function These functions
+// are implemented as part of Packet struct.
+// Connect - API to connect to specified Router / Broker / Medium
 // Distribute - API to Publish Messages into specified Pipe (Topic / Subject)
 // Accept - Consume the incoming message if subscribed by that component
 // Get - Would initiate blocking call to remote process to get response
 // Close - Would disconnect the connection with Middleware.
 type MQBus interface {
+	Connect() error
 	Distribute(pipe string, data interface{}) error
 	Accept(pipe string, fn MsgProcess) error
 	Get(pipe string, d interface{}) interface{}
@@ -50,39 +63,16 @@ type MQBus interface {
 // be sent to MessageBus as callback for handling the incoming messages.
 type MsgProcess func(d interface{})
 
-// Packet defines all the message related information that Producer or Consumer
-// should know for message transactions. Both Producer and Consumer use this
-// same structure for message transactions.
-// BrokerType - Refer above defined Constants for possible values
-// DataResponder - Refer HandleResponse Type description
-type Packet struct {
-	// BrokerType defines the underline MQ platform
-	BrokerType int
-}
-
 // Communicator defines the Broker platform Middleware selection and corresponding
 // communication object would be created to send / receive the messages. Broker
 // type would be stored as part of Connection Object "Packet".
-// TODO: We would be looking into Kafka Synchronous communication API for providing
-// support for Sync Communication Model in MessageBus
-func Communicator(bt int, messageQueueConfigPath string) (MQBus, error) {
+func Communicator(bt int) (MQBus, error) {
 
-	// Defining pointer for KAFKA Connection Objects Based on
-	// BrokerType value, Middleware Connection will be created. Also we would be
-	// storing maintain the connections as a Map (Between Connection and Pipe)
-	var kp *KafkaPacket
-
-	switch bt {
-	case KAFKA:
-		kp = new(KafkaPacket)
-		kp.BrokerType = bt
-		if e := KafkaConnect(kp, messageQueueConfigPath); e != nil {
-			return nil, e
-		}
-		return kp, nil
-	default:
-		return nil, fmt.Errorf("Broker: \"Broker Type\" is not supported - %d", bt)
+	p := reflect.New(MMap[bt]).Interface().(MQBus)
+	if e := p.Connect(); e != nil {
+		return nil, e
 	}
+	return p, nil
 }
 
 // Encode converts the interface into Byte stream (ENCODE).

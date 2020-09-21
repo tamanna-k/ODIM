@@ -1,15 +1,15 @@
-//(C) Copyright [2020] Hewlett Packard Enterprise Development LP
+// (C) Copyright [2020] Hewlett Packard Enterprise Development LP
 //
-//Licensed under the Apache License, Version 2.0 (the "License"); you may
-//not use this file except in compliance with the License. You may obtain
-//a copy of the License at
+// Licensed under the Apache License, Version 2.0 (the "License"); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
 //
-//    http://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-//WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-//License for the specific language governing permissions and limitations
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
 // under the License.
 
 // Package datacommunicator ...
@@ -40,11 +40,6 @@ import (
 // Writer maps, It also maintains the Dialer Object for initial Kafka connection.
 // Current Active Server name too maintained as part of KafkaPacket Object.
 type KafkaPacket struct {
-
-	// All common base function objects are defined in this object. This
-	// object will support only Publishing and Subscriptions based on KAFKA
-	// support. We use KAFKA 2.2.0 with Scala 2.12.
-	Packet
 
 	// Following are the map definition of both KAFKA reader and writers with Topic name.
 	// Instead of using low level Conn Object from KAFKA-GO, we are using this high level
@@ -105,7 +100,7 @@ func TLS(cCert, cKey, caCert string) (*tls.Config, error) {
 // Dialer object will be used for both Reader and Writer objects. These objects
 // would be updated if there is a request coming for specific Pipe, that specific
 // Pipe name and Connection object would be stored as part of this map pair.
-func KafkaConnect(kp *KafkaPacket, messageQueueConfigPath string) error {
+func (kp *KafkaPacket)Connect() error {
 
 	// Using MQF details, connecting to the KAFKA Server.
 	kp.Server = mq.KServer + ":" + strconv.Itoa(mq.KLport)
