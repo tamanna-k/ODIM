@@ -52,7 +52,6 @@ type MQBus interface {
 	Connect() error
 	Distribute(pipe string, data interface{}) error
 	Accept(pipe string, fn MsgProcess) error
-	Get(pipe string, d interface{}) interface{}
 	Remove(pipe string) error
 	Close()
 }
@@ -66,7 +65,7 @@ type MsgProcess func(d interface{})
 // Communicator defines the Broker platform Middleware selection and corresponding
 // communication object would be created to send / receive the messages. Broker
 // type would be stored as part of Connection Object "Packet".
-func Communicator(bt int) (MQBus, error) {
+func Communicator(bt BrokerID) (MQBus, error) {
 
 	p := reflect.New(MMap[bt]).Interface().(MQBus)
 	if e := p.Connect(); e != nil {
