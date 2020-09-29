@@ -130,7 +130,8 @@ func PublishEventsToDestination(data interface{}) bool {
 	originResource := deviceSubscription.OriginResources[0]
 	var eventString string
 	eventString, uuid = formatEvent(originResource, requestData, host)
-	eventRequest := []byte(eventString)
+	message, parseStatus = parseEventData(eventString)
+	eventRequest, _ := json.Marshal(message)
 
 	subscriptions, err := evmodel.GetEvtSubscriptions(host)
 	if err != nil {
@@ -379,7 +380,6 @@ func parseEventData(requestData string) (ForwardEventMessageData, bool) {
 	var message common.MessageData
 	err := json.Unmarshal([]byte(requestData), &forwardEventData)
 	if err != nil {
-		log.Printf("error: Failed to unmarshal the event: %v", err)
 		if err = json.Unmarshal([]byte(requestData), &message); err != nil {
 			log.Printf("error: Failed to unmarshal the event: %v", err)
 			log.Println("incoming event:", requestData)
