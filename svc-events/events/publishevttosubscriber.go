@@ -166,10 +166,8 @@ func filterEventsToBeForwarded(subscription evmodel.Subscription, events []byte,
 	eventTypes := subscription.EventTypes
 	messageIds := subscription.MessageIds
 	resourceTypes := subscription.ResourceTypes
-	var message ForwardEventMessageData
-	err := json.Unmarshal(events, &message)
-	if err != nil {
-		log.Printf("error: Failed to unmarshal the event: %v", err)
+	message, parseStatus := parseEventData(string(events))
+	if !parseStatus {
 		return false
 	}
 	originCondition := strings.TrimSuffix(message.Events[0].OriginOfCondition, "/")
@@ -391,7 +389,7 @@ func parseEventData(requestData string) (ForwardEventMessageData, bool) {
 		forwardEventData.Context = message.Context
 		forwardEventData.Name = message.Name
 		forwardEventData.OdataType = message.OdataType
-		events := make([]ForwardEvent, 0)
+		var events []ForwardEvent
 		for i := 0; i < len(forwardEventData.Events); i++ {
 			var event ForwardEvent
 			event.EventGroupID = message.Events[i].EventGroupID
