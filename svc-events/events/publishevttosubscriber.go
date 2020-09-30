@@ -130,8 +130,8 @@ func PublishEventsToDestination(data interface{}) bool {
 	originResource := deviceSubscription.OriginResources[0]
 	var eventString string
 	eventString, uuid = formatEvent(originResource, requestData, host)
-	message, parseStatus = parseEventData(eventString)
-	eventRequest, _ := json.Marshal(message)
+	forwardEvent, parseStatus := parseEventData(eventString)
+	eventRequest, _ := json.Marshal(forwardEvent)
 
 	subscriptions, err := evmodel.GetEvtSubscriptions(host)
 	if err != nil {
