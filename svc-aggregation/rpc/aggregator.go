@@ -95,9 +95,6 @@ func (a *Aggregator) GetAggregationService(ctx context.Context, req *aggregatorp
 		AggregationSources: agresponse.OdataID{
 			OdataID: "/redfish/v1/AggregationService/AggregationSources",
 		},
-		ConnectionMethods: agresponse.OdataID{
-			OdataID: "/redfish/v1/AggregationService/ConnectionMethods",
-		},
 		ServiceEnabled: isServiceEnabled,
 		Status: agresponse.Status{
 			State:        serviceState,
