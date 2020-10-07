@@ -30,7 +30,7 @@ import (
 	"github.com/ODIM-Project/ODIM/svc-events/consumer"
 	"github.com/ODIM-Project/ODIM/svc-events/evmodel"
 	"github.com/ODIM-Project/ODIM/svc-events/evresponse"
-	"github.com/ODIM-Project/ODIM/svc-plugin-rest-client/pmbhandle"
+	"github.com/ODIM-Project/ODIM/lib-rest-client/pmbhandle"
 )
 
 const (
