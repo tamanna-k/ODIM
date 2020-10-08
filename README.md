@@ -108,8 +108,8 @@ To install `Ubuntu Make`, run the following command:
 This section provides a step-by-step procedure for deploying the resource aggregator for ODIM (odimra) and GRF plugin.
 
 > **NOTE:**
-  • All configuration parameters are set to default values in the configuration files for odimra and GRF plugin. 
-  • The following ports are used for deploying odimra and GRF plugin:
+  ï¿½ All configuration parameters are set to default values in the configuration files for odimra and GRF plugin. 
+  ï¿½ The following ports are used for deploying odimra and GRF plugin:
     45000, 45001, 45101-45110, 9092, 9082, 6380, 6379, 8500, 8300, 8302, 8301, 8600
     Ensure that the above ports are not in use.
 
@@ -369,7 +369,32 @@ This section provides a step-by-step procedure for deploying the resource aggreg
 
      ```
      $ docker restart odim_1
-  
+     ```
+13.  Use following commands to undeploy odimra solution and remove the docker images, persistent data, logs.
+
+     ```
+     $ make clean
+     ```
+     The above command will perform below tasks:
+     - brings down all the deployed containers.
+     - remove only those docker images which were created and deployed as containers.
+     - removes data stored by Consul, Redis & Kafka.
+
+     ```
+     $ make deepclean
+     ```
+     The above command will perform below tasks: 
+     - brings down the deployed conatiners
+     - remove all the docker images, as well as intermediate/dependent images created as part of deployment.
+     - removes configuration & data stored by Consul, Redis & Kafka
+     - removes all generated certifictes.
+     - removes logs files created for odimra services and grfplugin.
+
+     [NOTE] Provide the sudo password when prompted by above commands.
+
+     [CAUTION] The above commands are not encouraged to be executed in production envoirnment as this will erase important data.
+               The action is irrecoverable and will wipe all the odimra completely. 
+
     
    **NOTE:**
    To Refer to the ODIMRA API Guide, click on the github page below:  
