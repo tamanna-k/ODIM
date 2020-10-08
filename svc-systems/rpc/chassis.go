@@ -23,6 +23,7 @@ import (
 
 	"github.com/ODIM-Project/ODIM/lib-utilities/common"
 	chassisproto "github.com/ODIM-Project/ODIM/lib-utilities/proto/chassis"
+	"github.com/ODIM-Project/ODIM/lib-utilities/response"
 	"github.com/ODIM-Project/ODIM/svc-plugin-rest-client/pmbhandle"
 	"github.com/ODIM-Project/ODIM/svc-systems/chassis"
 	"github.com/ODIM-Project/ODIM/svc-systems/scommon"
@@ -31,6 +32,17 @@ import (
 // ChassisRPC struct helps to register service
 type ChassisRPC struct {
 	IsAuthorizedRPC func(sessionToken string, privileges, oemPrivileges []string) (int32, string)
+}
+
+func (cha *ChassisRPC) CreateChassis(ctx context.Context, req *chassisproto.CreateChassisRequest, resp *chassisproto.GetChassisResponse) error {
+	r := auth(ctx, func() response.RPC {
+		return createChassis(ctx, req)
+	})
+
+	resp.Header = r.Header
+	resp.Body = generateResponse(r.Body)
+	resp.StatusCode = r.StatusCode
+	return nil
 }
 
 //GetChassisResource defines the operations which handles the RPC request response
@@ -118,6 +130,9 @@ func (cha *ChassisRPC) GetChassisInfo(ctx context.Context, req *chassisproto.Get
 }
 
 func generateResponse(input interface{}) []byte {
+	if bytes, alreadyBytes := input.([]byte); alreadyBytes {
+		return bytes
+	}
 	bytes, err := json.Marshal(input)
 	if err != nil {
 		log.Println("error in unmarshalling response object from util-libs", err.Error())
