@@ -16,6 +16,14 @@
 # Script is for generating certificate and private key
 # for Client mode connection usage only
 
+if [[ -z $FQDN ]]; then
+	echo "[ERROR] Set FQDN to environment of the host machine using the following command: export FQDN=<user_preferred_fqdn_for_host>"
+	exit 1
+fi
+if [[ -z $HOSTIP ]]; then
+	echo "[ERROR] Set the environment variable, HOSTIP to the IP address of your system using following coomand: export HOSTIP=<ip_address_of_your_system>"
+        exit 1
+fi
 RootServiceUUID=$(uuidgen)
 sed -i "s#\"RootServiceUUID\".*#\"RootServiceUUID\": \"${RootServiceUUID}\",#" build/odimra/odimra_config/odimra_config.json
 
@@ -27,4 +35,3 @@ else
 	cd build && docker build -t odimra_builddep:tst -f odimra/Dockerfile.builddep .
 	exit 0
 fi
-

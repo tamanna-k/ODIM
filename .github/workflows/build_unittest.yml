@@ -15,7 +15,8 @@ name: build_unittest
 
 on:
   pull_request:
-    branches: [ development ]
+    branches:
+      - '**'
 
 jobs:
 
@@ -110,4 +111,4 @@ jobs:
           done
             
           
-        
+    
