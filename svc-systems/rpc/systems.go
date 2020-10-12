@@ -47,7 +47,7 @@ func (s *Systems) GetSystemResource(ctx context.Context, req *systemsproto.GetSy
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -61,7 +61,7 @@ func (s *Systems) GetSystemResource(ctx context.Context, req *systemsproto.GetSy
 	resp.Header = data.Header
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -77,7 +77,7 @@ func (s *Systems) GetSystemsCollection(ctx context.Context, req *systemsproto.Ge
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -86,7 +86,7 @@ func (s *Systems) GetSystemsCollection(ctx context.Context, req *systemsproto.Ge
 	resp.Header = data.Header
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -104,7 +104,7 @@ func (s *Systems) GetSystems(ctx context.Context, req *systemsproto.GetSystemsRe
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -118,7 +118,7 @@ func (s *Systems) GetSystems(ctx context.Context, req *systemsproto.GetSystemsRe
 	resp.Header = data.Header
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -136,7 +136,7 @@ func (s *Systems) ComputerSystemReset(ctx context.Context, req *systemsproto.Com
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -149,7 +149,7 @@ func (s *Systems) ComputerSystemReset(ctx context.Context, req *systemsproto.Com
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
 	resp.Header = data.Header
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -167,7 +167,7 @@ func (s *Systems) SetDefaultBootOrder(ctx context.Context, req *systemsproto.Def
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -180,7 +180,7 @@ func (s *Systems) SetDefaultBootOrder(ctx context.Context, req *systemsproto.Def
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
 	resp.Header = data.Header
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -198,7 +198,7 @@ func (s *Systems) ChangeBiosSettings(ctx context.Context, req *systemsproto.Bios
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -211,7 +211,7 @@ func (s *Systems) ChangeBiosSettings(ctx context.Context, req *systemsproto.Bios
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
 	resp.Header = data.Header
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -229,7 +229,7 @@ func (s *Systems) ChangeBootOrderSettings(ctx context.Context, req *systemsproto
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -242,7 +242,7 @@ func (s *Systems) ChangeBootOrderSettings(ctx context.Context, req *systemsproto
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
 	resp.Header = data.Header
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -260,7 +260,7 @@ func (s *Systems) CreateVolume(ctx context.Context, req *systemsproto.VolumeRequ
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -270,7 +270,7 @@ func (s *Systems) CreateVolume(ctx context.Context, req *systemsproto.VolumeRequ
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
 	resp.Header = data.Header
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
 
@@ -288,7 +288,7 @@ func (s *Systems) DeleteVolume(ctx context.Context, req *systemsproto.VolumeRequ
 		resp.StatusCode = authStatusCode
 		resp.StatusMessage = authStatusMessage
 		rpcResp := common.GeneralError(authStatusCode, authStatusMessage, errorMessage, nil, nil)
-		resp.Body = generateResponse(rpcResp.Body)
+		resp.Body = jsonMarshal(rpcResp.Body)
 		resp.Header = rpcResp.Header
 		log.Printf(errorMessage)
 		return nil
@@ -298,6 +298,6 @@ func (s *Systems) DeleteVolume(ctx context.Context, req *systemsproto.VolumeRequ
 	resp.StatusCode = data.StatusCode
 	resp.StatusMessage = data.StatusMessage
 	resp.Header = data.Header
-	resp.Body = generateResponse(data.Body)
+	resp.Body = jsonMarshal(data.Body)
 	return nil
 }
