@@ -1423,7 +1423,7 @@ func (p *PluginContact) createFabricSubscription(postRequest evmodel.RequestBody
 		log.Println(errorMessage)
 		return "", resp
 	}
-	
+
 	evtSubscription := evmodel.Subscription{
 		EventHostIP:    deviceIPAddress,
 		OriginResource: origin,
