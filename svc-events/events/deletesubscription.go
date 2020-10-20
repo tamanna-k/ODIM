@@ -25,6 +25,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"strings"
 
@@ -441,12 +442,23 @@ func (p *PluginContact) subscribe(subscriptionPost evmodel.EvtSubPost, origin st
 // DeleteFabricsSubscription will delete fabric subscription
 func (p *PluginContact) DeleteFabricsSubscription(originResource string, plugin *evmodel.Plugin) (response.RPC, error) {
 	var resp response.RPC
-
-	devSub, err := evmodel.GetDeviceSubscriptions(plugin.IP)
+	addr, err := net.LookupIP(plugin.IP)
+	if err != nil || len(addr) < 1 {
+		errorMessage := "Can't lookup the ip from host name"
+		if err != nil {
+			errorMessage = "Can't lookup the ip from host name" + err.Error()
+		}
+		var msgArgs = []interface{}{"ManagerAddress", plugin.IP}
+		evcommon.GenErrorResponse(errorMessage, response.ResourceNotFound, http.StatusNotFound, msgArgs, &resp)
+		log.Printf(errorMessage)
+		return resp, fmt.Errorf(errorMessage)
+	}
+	deviceIPAddress := fmt.Sprintf("%v", addr[0])
+	devSub, err := evmodel.GetDeviceSubscriptions(deviceIPAddress)
 	if err != nil {
 		errorMessage := "Error while get device subscription details: " + err.Error()
 		if strings.Contains(err.Error(), "No data found for the key") {
-			var msgArgs = []interface{}{"CFM Plugin", plugin.IP}
+			var msgArgs = []interface{}{"CFM Plugin", deviceIPAddress}
 			evcommon.GenErrorResponse(errorMessage, response.ResourceNotFound, http.StatusNotFound, msgArgs, &resp)
 			log.Printf(errorMessage)
 			return resp, err
@@ -515,6 +527,7 @@ func (p *PluginContact) resubscribeFabricsSubscription(subscriptionPost evmodel.
 			log.Printf(errorMessage)
 			return fmt.Errorf(errorMessage)
 		}
+
 		// Deleting the fabric subscription
 		_, err := p.DeleteFabricsSubscription(origin, plugin)
 		if err != nil {
@@ -573,8 +586,18 @@ func (p *PluginContact) resubscribeFabricsSubscription(subscriptionPost evmodel.
 		}
 		log.Println("Resubscribe response status code:", response.StatusCode)
 		log.Println("Resubscribe response body:", response.Body)
+		addr, err := net.LookupIP(plugin.IP)
+		if err != nil || len(addr) < 1 {
+			errorMessage := "Can't lookup the ip from host name"
+			if err != nil {
+				errorMessage = "Can't lookup the ip from host name" + err.Error()
+			}
+
+			return fmt.Errorf(errorMessage)
+		}
+		deviceIPAddress := fmt.Sprintf("%v", addr[0])
 		// Update Location to all destination of device if already subscribed to the device
-		devSub, err := evmodel.GetDeviceSubscriptions(plugin.IP)
+		devSub, err := evmodel.GetDeviceSubscriptions(deviceIPAddress)
 		if err != nil {
 			return err
 		}
