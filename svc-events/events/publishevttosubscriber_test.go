@@ -148,7 +148,7 @@ func storeTestEventDetails(t *testing.T) {
 		},
 		{
 			UserName:             "admin",
-			SubscriptionID:       "81de0110-c35a-4859-984c-072d6c5a32d7",
+			SubscriptionID:       "81de0110-c35a-4859-984c-072d6c5a32d8",
 			Destination:          "https://10.24.1.9:9090/events",
 			Name:                 "Subscription",
 			Location:             "https://10.24.1.2/EventService/Subscriptions/1",
