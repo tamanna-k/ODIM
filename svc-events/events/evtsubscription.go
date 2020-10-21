@@ -529,12 +529,8 @@ func (p *PluginContact) eventSubscription(postRequest evmodel.RequestBody, origi
 		return "", resp
 	}
 	// get the ip address from the host name
-	addr, err := net.LookupIP(target.ManagerAddress)
-	if err != nil || len(addr) < 1 {
-		errorMessage := "Can't lookup the ip from host name"
-		if err != nil {
-			errorMessage = "Can't lookup the ip from host name" + err.Error()
-		}
+	addr, errorMessage := getIPFromHostName(target.ManagerAddress)
+	if errorMessage != "" {
 		evcommon.GenEventErrorResponse(errorMessage, errResponse.ResourceNotFound, http.StatusBadRequest,
 			&resp, []interface{}{"ManagerAddress", target.ManagerAddress})
 		log.Printf(errorMessage)
@@ -1342,12 +1338,8 @@ func (p *PluginContact) createFabricSubscription(postRequest evmodel.RequestBody
 	if len(subscriptionPost.ResourceTypes) == 0 {
 		subscriptionPost.ResourceTypes = emptySlice
 	}
-	addr, err := net.LookupIP(plugin.IP)
-	if err != nil || len(addr) < 1 {
-		errorMessage := "Can't lookup the ip from host name"
-		if err != nil {
-			errorMessage = "Can't lookup the ip from host name" + err.Error()
-		}
+	addr, errorMessage := getIPFromHostName(plugin.IP)
+	if errorMessage != "" {
 		evcommon.GenEventErrorResponse(errorMessage, errResponse.ResourceNotFound, http.StatusBadRequest,
 			&resp, []interface{}{"ManagerAddress", plugin.IP})
 		log.Printf(errorMessage)
@@ -1536,4 +1528,16 @@ func isHostPresent(hosts []string, hostip string) bool {
 		rear--
 	}
 	return false
+}
+
+func getIPFromHostName(fqdn string) ([]net.IP, string) {
+	addr, err := net.LookupIP(fqdn)
+	var errorMessage string
+	if err != nil || len(addr) < 1 {
+		errorMessage = "Can't lookup the ip from host name"
+		if err != nil {
+			errorMessage = "Can't lookup the ip from host name" + err.Error()
+		}
+	}
+	return addr, errorMessage
 }
