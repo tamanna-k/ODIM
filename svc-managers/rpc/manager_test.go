@@ -32,11 +32,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func mockIsAuthorized(sessionToken string, privileges, oemPrivileges []string) response.RPC {
+func mockIsAuthorized(sessionToken string, privileges, oemPrivileges []string) (int32, string) {
 	if sessionToken != "validToken" {
-		return common.GeneralError(http.StatusUnauthorized, response.NoValidSession, "error while trying to authenticate session", nil, nil)
+		return http.StatusUnauthorized, response.NoValidSession
 	}
-	return common.GeneralError(http.StatusOK, response.Success, "", nil, nil)
+	return http.StatusOK, response.Success
 }
 
 func mockContactClient(url, method, token string, odataID string, body interface{}, loginCredential map[string]string) (*http.Response, error) {
